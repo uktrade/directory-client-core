@@ -4,23 +4,32 @@
 #
 #    pip-compile --output-file requirements_test.txt requirements_test.in
 #
--e git+https://github.com/uktrade/directory-signature-auth.git@v2.0.1#egg=sigauth
+certifi==2018.1.18        # via requests, sigauth
+chardet==3.0.4            # via requests, sigauth
 codecov==2.0.9
-coverage==4.4.1           # via codecov, pytest-cov
-django==1.11.5
-djangorestframework==3.4.7
+coverage==4.5.1           # via codecov, pytest-cov
+django==1.11.5            # via sigauth
+djangorestframework==3.4.7  # via sigauth
 flake8==3.0.4
+idna==2.6                 # via requests, sigauth
 mccabe==0.5.3             # via flake8
-mohawk==0.3.4
+mohawk==0.3.4             # via sigauth
 monotonic==1.2
-py==1.4.34                # via pytest
+pkginfo==1.4.1            # via sigauth, twine
+py==1.5.2                 # via pytest
 pycodestyle==2.0.0        # via flake8
 pyflakes==1.2.3           # via flake8
 pytest-cov==2.3.1
 pytest-sugar==0.8.0
 pytest==3.0.2
-pytz==2017.2              # via django
-requests==2.13.0
+pytz==2017.2              # via django, sigauth
+requests-toolbelt==0.8.0  # via sigauth, twine
+requests==2.18.4
 requests_mock==1.1.0
-six==1.11.0               # via mohawk, requests-mock
+sigauth==2.1.0
+six==1.11.0               # via mohawk, requests-mock, sigauth
 termcolor==1.1.0          # via pytest-sugar
+tqdm==4.19.6              # via sigauth, twine
+twine==1.9.1
+urllib3==1.22             # via requests, sigauth
+wheel==0.30.0

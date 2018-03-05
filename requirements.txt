@@ -4,11 +4,19 @@
 #
 #    pip-compile --output-file requirements.txt requirements.in
 #
--e git+https://github.com/uktrade/directory-signature-auth.git@v2.0.1#egg=sigauth
-django==1.11.5
-djangorestframework==3.4.7
-mohawk==0.3.4
+certifi==2018.1.18        # via requests, sigauth
+chardet==3.0.4            # via requests, sigauth
+django==1.11.5            # via sigauth
+djangorestframework==3.4.7  # via sigauth
+idna==2.6                 # via requests, sigauth
+mohawk==0.3.4             # via sigauth
 monotonic==1.2
-pytz==2017.2              # via django
-requests==2.13.0
-six==1.11.0               # via mohawk
+pkginfo==1.4.1            # via sigauth, twine
+pytz==2017.2              # via django, sigauth
+requests-toolbelt==0.8.0  # via sigauth, twine
+requests==2.18.4
+sigauth==2.1.0
+six==1.11.0               # via mohawk, sigauth
+tqdm==4.19.6              # via sigauth, twine
+twine==1.9.1
+urllib3==1.22             # via requests, sigauth
