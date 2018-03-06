@@ -7,3 +7,4 @@ pytest-sugar==0.8.0
 flake8==3.0.4
 requests_mock==1.1.0
 wheel==0.30.0
+twine==1.9.1
