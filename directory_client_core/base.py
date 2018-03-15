@@ -82,6 +82,25 @@ class BaseAPIClient:
             authenticator=authenticator,
         )
 
+    @staticmethod
+    def build_url(base_url, partial_url):
+        """
+        Makes sure the URL is built properly.
+
+        >>> urllib.parse.urljoin('https://test.com/1/', '2/3')
+        https://test.com/1/2/3
+        >>> urllib.parse.urljoin('https://test.com/1/', '/2/3')
+        https://test.com/2/3
+        >>> urllib.parse.urljoin('https://test.com/1', '2/3')
+        https://test.com/2/3'
+        """
+        if not base_url.endswith('/'):
+            base_url += '/'
+        if partial_url.startswith('/'):
+            partial_url = partial_url[1:]
+
+        return urlparse.urljoin(base_url, partial_url)
+
     def request(
         self, method, url, content_type=None, data=None, params=None,
         files=None, authenticator=None
@@ -100,7 +119,7 @@ class BaseAPIClient:
         if content_type:
             headers["Content-type"] = content_type
 
-        url = urlparse.urljoin(self.base_url, url)
+        url = self.build_url(self.base_url, url)
 
         start_time = monotonic()
 

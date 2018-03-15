@@ -3,6 +3,7 @@ from io import StringIO
 import http
 from unittest import TestCase
 
+import pytest
 import requests
 
 from tests import stub_request
@@ -13,7 +14,7 @@ class BaseAPIClientTest(TestCase):
 
     def setUp(self):
         self.client = BaseAPIClient(
-            base_url='https://example.com', api_key='test'
+            base_url='https://example.com/', api_key='test'
         )
 
     @stub_request('https://example.com/test', 'post')
@@ -77,3 +78,32 @@ class BaseAPIClientTest(TestCase):
     def test_send_response_not_ok(self, stub):
         response = self.client.send(method="POST", url="https://example.com")
         assert response.status_code == http.client.BAD_REQUEST
+
+
+@pytest.mark.parametrize(
+    'base_url,partial_url,expected_result',
+    [
+        (
+            'http://test.com/1/',
+            '/2/3/',
+            'http://test.com/1/2/3/'
+        ),
+        (
+            'http://test.com/1',
+            '2/3/',
+            'http://test.com/1/2/3/'
+        ),
+        (
+            'http://test.com/1',
+            '/2/3/',
+            'http://test.com/1/2/3/'
+        ),
+        (
+            'http://test.com/1/',
+            '2/3/',
+            'http://test.com/1/2/3/'
+        )
+    ]
+)
+def test_build_url(base_url, partial_url, expected_result):
+    assert BaseAPIClient.build_url(base_url, partial_url) == expected_result
