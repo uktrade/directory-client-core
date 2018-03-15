@@ -17,7 +17,6 @@ class BaseAPIClient:
     def __init__(self, base_url=None, api_key=None):
         assert base_url, "Missing base url"
         assert api_key, "Missing API key"
-        assert base_url.endswith('/'), "Base url must end with trailing slash"
         self.base_url = base_url
         self.request_signer = RequestSigner(secret=api_key)
 
