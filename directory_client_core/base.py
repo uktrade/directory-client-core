@@ -92,7 +92,7 @@ class BaseAPIClient:
         >>> urllib.parse.urljoin('https://test.com/1/', '/2/3')
         https://test.com/2/3
         >>> urllib.parse.urljoin('https://test.com/1', '2/3')
-        https://stage.buyer.directory.uktrade.io/2/3'
+        https://test.com/2/3'
         """
         if not base_url.endswith('/'):
             base_url += '/'
