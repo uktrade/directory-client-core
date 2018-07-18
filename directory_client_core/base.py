@@ -14,11 +14,12 @@ logger = logging.getLogger(__name__)
 
 class BaseAPIClient:
 
-    def __init__(self, base_url=None, api_key=None):
+    def __init__(self, base_url=None, api_key=None, timeout=2):
         assert base_url, "Missing base url"
         assert api_key, "Missing API key"
         self.base_url = base_url
         self.request_signer = RequestSigner(secret=api_key)
+        self.timeout = timeout
 
     def put(self, url, data, authenticator=None):
         return self.request(
@@ -157,4 +158,4 @@ class BaseAPIClient:
         ).prepare()
 
         signed_request = self.sign_request(prepared_request=prepared_request)
-        return requests.Session().send(signed_request)
+        return requests.Session().send(signed_request, timeout=self.timeout)

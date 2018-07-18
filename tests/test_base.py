@@ -72,6 +72,8 @@ class BaseAPIClientTest(TestCase):
     @stub_request('https://example.com', 'post')
     def test_send_response_ok(self, stub):
         response = self.client.send(method="POST", url="https://example.com")
+
+        assert response.request.timeout == 2
         assert response.status_code == http.client.OK
 
     @stub_request('https://example.com', 'post', http.client.BAD_REQUEST)
