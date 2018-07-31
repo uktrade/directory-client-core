@@ -1,3 +1,4 @@
+import abc
 import json
 import logging
 import urllib.parse as urlparse
@@ -5,20 +6,24 @@ import urllib.parse as urlparse
 from monotonic import monotonic
 import requests
 
-from directory_client_core.version import __version__
-from sigauth.utils import RequestSigner
+from sigauth.helpers import RequestSigner
 
 
 logger = logging.getLogger(__name__)
 
 
-class BaseAPIClient:
+class AbstractAPIClient(abc.ABC):
 
-    def __init__(self, base_url=None, api_key=None, timeout=2):
-        assert base_url, "Missing base url"
-        assert api_key, "Missing API key"
+    @property
+    @abc.abstractmethod
+    def version():
+        pass
+
+    def __init__(self, base_url, api_key, sender_id, timeout):
         self.base_url = base_url
-        self.request_signer = RequestSigner(secret=api_key)
+        self.request_signer = RequestSigner(
+            secret=api_key, sender_id=sender_id
+        )
         self.timeout = timeout
 
     def put(self, url, data, authenticator=None):
@@ -110,9 +115,7 @@ class BaseAPIClient:
         logger.debug("API request {} {}".format(method, url))
 
         headers = {
-            "User-agent": "EXPORT-DIRECTORY-API-CLIENT/{}".format(
-                __version__
-            )
+            "User-agent": "EXPORT-DIRECTORY-API-CLIENT/{}".format(self.version)
         }
         if authenticator:
             headers.update(authenticator.get_auth_headers())
