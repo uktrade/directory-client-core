@@ -7,15 +7,26 @@ import pytest
 import requests
 
 from tests import stub_request
-from directory_client_core.base import BaseAPIClient
+from directory_client_core.base import AbstractAPIClient
 
 
-class BaseAPIClientTest(TestCase):
+class TestAPIClient(AbstractAPIClient):
+    version = 1
+
+
+class AbstractAPIClientTest(TestCase):
 
     def setUp(self):
-        self.client = BaseAPIClient(
-            base_url='https://example.com/', api_key='test'
+        self.client = TestAPIClient(
+            base_url='https://example.com/',
+            api_key='test',
+            sender_id='test-sender-id',
+            timeout=2,
         )
+
+    def test_request_signer(self):
+        assert self.client.request_signer.secret == 'test'
+        assert self.client.request_signer.sender_id == 'test-sender-id'
 
     @stub_request('https://example.com/test', 'post')
     def test_request(self, stub):
@@ -108,4 +119,4 @@ class BaseAPIClientTest(TestCase):
     ]
 )
 def test_build_url(base_url, partial_url, expected_result):
-    assert BaseAPIClient.build_url(base_url, partial_url) == expected_result
+    assert TestAPIClient.build_url(base_url, partial_url) == expected_result

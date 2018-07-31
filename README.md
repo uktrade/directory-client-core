@@ -3,7 +3,7 @@
 [![code-climate-image]][code-climate]
 [![circle-ci-image]][circle-ci]
 [![codecov-image]][codecov]
-[![gemnasium-image]][gemnasium]
+[![pypi-image]][pypi]
 
 **Directory Client Core.**
 
@@ -15,21 +15,34 @@ Common code for the Directory API clients.
 ## Installation
 
 ```shell
-pip install -e git+https://git@github.com/uktrade/directory-client-core.git@0.0.1#egg=directory-client-core
+pip install directory-client-core
 ```
 
 ## Usage
 
 ```python
-from directory_client_core.client import ClientBase
+from directory_client_core.base import AbstractAPIClient
 
 
-class MyAPIClient(ClientBase):
+class MyAPIClient(AbstractAPIClient):
+
+    version = 1  # passed as a header in all requests
+
     def get_something(self):
         return self.get(...)
 
     def create_sometime(self):
         return self.post(...)
+
+
+client = MyAPIClient(
+    base_url='https://example.com/',
+    api_key='test',
+    sender_id='test-sender-id',
+    timeout=2,
+)
+
+response = client.get_something()
 ```
 
 ## Development
@@ -61,5 +74,5 @@ Then run the following command:
 [codecov-image]: https://codecov.io/gh/uktrade/directory-client-core/branch/master/graph/badge.svg
 [codecov]: https://codecov.io/gh/uktrade/directory-client-core
 
-[gemnasium-image]: https://gemnasium.com/badges/github.com/uktrade/directory-client-core.svg
-[gemnasium]: https://gemnasium.com/github.com/uktrade/directory-client-core
+[pypi-image]: https://badge.fury.io/py/directory-client-core.svg
+[pypi]: https://badge.fury.io/py/directory-client-core
