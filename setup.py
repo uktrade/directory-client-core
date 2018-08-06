@@ -6,7 +6,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='directory_client_core',
-    version='4.0.1',
+    version='4.0.2',
     url='https://github.com/uktrade/directory-client-core',
     license='MIT',
     author='Department for International Trade',
@@ -17,7 +17,7 @@ setup(
     install_requires=[
         'requests>=2.18.4,<3.0.0',
         'monotonic>=1.2,<3.0',
-        'sigauth<5.0.0',
+        'sigauth>=4.0.1,<5.0.0',
     ],
     classifiers=[
         'Development Status :: 5 - Production/Stable',
