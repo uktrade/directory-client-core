@@ -22,7 +22,7 @@ def test_authentication_negotiator_bearer():
 def test_bearer_authenticator():
     authenticator = authentication.BearerAuthenticator('123')
 
-    assert authenticator.get_auth_headers() == {
+    assert authenticator.headers == {
         'Authorization': 'Bearer 123'
     }
 
@@ -30,6 +30,6 @@ def test_bearer_authenticator():
 def test_sso_authenticator():
     authenticator = authentication.SessionSSOAuthenticator('123')
 
-    assert authenticator.get_auth_headers() == {
+    assert authenticator.headers == {
         'Authorization': 'SSO_SESSION_ID 123'
     }

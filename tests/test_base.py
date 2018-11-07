@@ -1,4 +1,3 @@
-
 from io import StringIO
 import http
 from unittest import TestCase
@@ -8,6 +7,7 @@ import requests
 
 from tests import stub_request
 from directory_client_core.base import AbstractAPIClient
+from directory_client_core import authentication, cache_control
 
 
 class TestAPIClient(AbstractAPIClient):
@@ -91,6 +91,28 @@ class AbstractAPIClientTest(TestCase):
     def test_send_response_not_ok(self, stub):
         response = self.client.send(method="POST", url="https://example.com")
         assert response.status_code == http.client.BAD_REQUEST
+
+    @stub_request('https://example.com/test', 'get')
+    def test_authenticator(self, stub):
+        self.client.request(
+            "GET",
+            'test',
+            authenticator=authentication.BearerAuthenticator('123'),
+        )
+
+        request = stub.request_history[0]
+
+        assert request.headers['Authorization'] == 'Bearer 123'
+
+    @stub_request('https://example.com/test', 'get')
+    def test_cache_control(self, stub):
+        self.client.request(
+            "GET", 'test', cache_control=cache_control.ETagCacheControl('123'),
+        )
+
+        request = stub.request_history[0]
+
+        assert request.headers['If-None-Match'] == '123'
 
 
 @pytest.mark.parametrize(

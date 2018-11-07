@@ -6,13 +6,14 @@ from setuptools import setup, find_packages
 
 setup(
     name='directory_client_core',
-    version='4.0.2',
+    version='4.2.0',
     url='https://github.com/uktrade/directory-client-core',
     license='MIT',
     author='Department for International Trade',
     description='Python common code for Directory API clients.',
     packages=find_packages(exclude=["tests.*", "tests"]),
     long_description=open('README.md').read(),
+    long_description_content_type='text/markdown',
     include_package_data=True,
     install_requires=[
         'requests>=2.18.4,<3.0.0',
