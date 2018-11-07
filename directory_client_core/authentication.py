@@ -1,25 +1,30 @@
 import abc
 
 
-class BaseAuthenticator(abc.ABC):
+class AbstractAuthenticator(abc.ABC):
     header_name = 'Authorization'
-    header_template = abc.abstractproperty()
     value = None
 
     def __init__(self, value):
         self.value = value
 
-    def get_auth_headers(self):
+    @property
+    @abc.abstractmethod
+    def header_template(self):
+        return ''
+
+    @property
+    def headers(self):
         return {
             self.header_name: self.header_template.format(self.value)
         }
 
 
-class BearerAuthenticator(BaseAuthenticator):
+class BearerAuthenticator(AbstractAuthenticator):
     header_template = 'Bearer {}'
 
 
-class SessionSSOAuthenticator(BaseAuthenticator):
+class SessionSSOAuthenticator(AbstractAuthenticator):
     header_template = 'SSO_SESSION_ID {}'
 
 

@@ -54,12 +54,13 @@ class AbstractAPIClient(abc.ABC):
             )
         return response
 
-    def get(self, url, params=None, authenticator=None):
+    def get(self, url, params=None, authenticator=None, cache_control=None):
         return self.request(
             url=url,
             method="GET",
             params=params,
             authenticator=authenticator,
+            cache_control=cache_control,
         )
 
     def post(self, url, data={}, files=None, authenticator=None):
@@ -109,16 +110,19 @@ class AbstractAPIClient(abc.ABC):
 
     def request(
         self, method, url, content_type=None, data=None, params=None,
-        files=None, authenticator=None
+        files=None, authenticator=None, cache_control=None,
     ):
 
         logger.debug("API request {} {}".format(method, url))
-
         headers = {
             "User-agent": "EXPORT-DIRECTORY-API-CLIENT/{}".format(self.version)
         }
+
         if authenticator:
-            headers.update(authenticator.get_auth_headers())
+            headers.update(authenticator.headers)
+
+        if cache_control:
+            headers.update(cache_control.headers)
 
         if content_type:
             headers["Content-type"] = content_type
