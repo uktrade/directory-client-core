@@ -46,6 +46,33 @@ client = MyAPIClient(
 response = client.get_something()
 ```
 
+### Caching
+
+The decorator `directory_client_core.helpers.fallback` can be used to cache the responses from the remote server, allowing the cached content to be later used if the remote server does not return the up to date live content (maybe it times out, maybe the server is down). This decorator also saves etag response headers to later expose them in requests and respect 304 (Not modified) response and serve already cached contents.
+
+```
+# settings.py
+DIRECTORY_CLIENT_CORE_CACHE_EXPIRE_SECONDS = 60 * 60 * 24 * 30  # 30 days
+
+# client.py
+
+from django.core.cache import caches
+
+from directory_client_core import helpers
+from directory_client_core.base import AbstractAPIClient
+
+
+class APIClient(AbstractAPIClient):
+    version = 1
+
+    @helpers.fallback(cache=caches['fallback'])
+    def get(self, *args, **kwargs):
+        return super().get(*args, **kwargs)
+
+    def retrieve(self):
+        return self.get(url='/some/path/')
+```
+
 ## Development
 
     $ git clone https://github.com/uktrade/directory-client-core
