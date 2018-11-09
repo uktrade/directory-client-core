@@ -6,7 +6,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='directory_client_core',
-    version='4.2.0',
+    version='4.3.0',
     url='https://github.com/uktrade/directory-client-core',
     license='MIT',
     author='Department for International Trade',
@@ -19,6 +19,8 @@ setup(
         'requests>=2.18.4,<3.0.0',
         'monotonic>=1.2,<3.0',
         'sigauth>=4.0.1,<5.0.0',
+        'django>=1.9,<2.0a1',
+        'w3lib>=1.19.0<2.0.0',
     ],
     classifiers=[
         'Development Status :: 5 - Production/Stable',
