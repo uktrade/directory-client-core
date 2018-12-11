@@ -26,23 +26,25 @@ class AbstractAPIClient(abc.ABC):
         )
         self.timeout = timeout
 
-    def put(self, url, data, authenticator=None):
+    def put(self, url, data, authenticator=None, cookies=None):
         return self.request(
             url=url,
             method="PUT",
             content_type="application/json",
             data=json.dumps(data),
             authenticator=authenticator,
+            cookies=cookies,
         )
 
-    def patch(self, url, data, files=None, authenticator=None):
+    def patch(self, url, data, files=None, authenticator=None, cookies=None):
         if files:
             response = self.request(
                 url=url,
                 method="PATCH",
                 data=data,
                 files=files,
-                authenticator=authenticator
+                authenticator=authenticator,
+                cookies=cookies,
             )
         else:
             response = self.request(
@@ -51,19 +53,24 @@ class AbstractAPIClient(abc.ABC):
                 content_type="application/json",
                 data=json.dumps(data),
                 authenticator=authenticator,
+                cookies=cookies,
             )
         return response
 
-    def get(self, url, params=None, authenticator=None, cache_control=None):
+    def get(
+        self, url, params=None, authenticator=None, cache_control=None,
+        cookies=None,
+    ):
         return self.request(
             url=url,
             method="GET",
             params=params,
             authenticator=authenticator,
             cache_control=cache_control,
+            cookies=cookies,
         )
 
-    def post(self, url, data={}, files=None, authenticator=None):
+    def post(self, url, data={}, files=None, authenticator=None, cookies=None):
         if files:
             response = self.request(
                 url=url,
@@ -71,6 +78,7 @@ class AbstractAPIClient(abc.ABC):
                 data=data,
                 files=files,
                 authenticator=authenticator,
+                cookies=cookies,
             )
         else:
             response = self.request(
@@ -79,14 +87,16 @@ class AbstractAPIClient(abc.ABC):
                 content_type="application/json",
                 data=json.dumps(data),
                 authenticator=authenticator,
+                cookies=cookies,
             )
         return response
 
-    def delete(self, url, data=None, authenticator=None):
+    def delete(self, url, data=None, authenticator=None, cookies=None):
         return self.request(
             url=url,
             method="DELETE",
             authenticator=authenticator,
+            cookies=cookies,
         )
 
     @staticmethod
@@ -110,7 +120,7 @@ class AbstractAPIClient(abc.ABC):
 
     def request(
         self, method, url, content_type=None, data=None, params=None,
-        files=None, authenticator=None, cache_control=None,
+        files=None, authenticator=None, cache_control=None, cookies=None,
     ):
 
         logger.debug("API request {} {}".format(method, url))
@@ -139,6 +149,7 @@ class AbstractAPIClient(abc.ABC):
                 data=data,
                 params=params,
                 files=files,
+                cookies=cookies,
             )
         finally:
             elapsed_time = monotonic() - start_time
