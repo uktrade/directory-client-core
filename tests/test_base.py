@@ -114,6 +114,66 @@ class AbstractAPIClientTest(TestCase):
 
         assert request.headers['If-None-Match'] == '123'
 
+    @stub_request('https://example.com/test', 'get')
+    def test_request_get_wo_cookies(self, stub):
+        self.client.request('GET', 'test')
+        request = stub.request_history[0]
+
+        assert 'Cookie' not in request.headers
+
+    @stub_request('https://example.com/test', 'get')
+    def test_request_get_w_cookies(self, stub):
+        cookies = {'cookie_name': 'value'}
+        self.client.request('GET', 'test', cookies=cookies)
+        request = stub.request_history[0]
+
+        assert request.headers['Cookie'] == 'cookie_name=value'
+
+    @stub_request('https://example.com/test', 'delete')
+    def test_request_delete_w_cookies(self, stub):
+        cookies = {'cookie_name': 'value'}
+        self.client.request('DELETE', 'test', cookies=cookies)
+        request = stub.request_history[0]
+
+        assert request.headers['Cookie'] == 'cookie_name=value'
+
+    @stub_request('https://example.com/test', 'put')
+    def test_request_put_w_cookies(self, stub):
+        cookies = {'cookie_name': 'value'}
+        self.client.request('PUT', 'test', data='data', cookies=cookies)
+        request = stub.request_history[0]
+
+        assert request.headers['Cookie'] == 'cookie_name=value'
+
+    @stub_request('https://example.com/test', 'patch')
+    def test_request_patch_w_cookies(self, stub):
+        cookies = {'cookie_name': 'value'}
+        self.client.request('PATCH', 'test', data='data', cookies=cookies)
+        request = stub.request_history[0]
+
+        assert request.headers['Cookie'] == 'cookie_name=value'
+
+    @stub_request('https://example.com/test', 'post')
+    def test_request_post_w_cookies(self, stub):
+        cookies = {'cookie_name': 'value'}
+        self.client.request('POST', 'test', data='data', cookies=cookies)
+        request = stub.request_history[0]
+
+        assert request.headers['Cookie'] == 'cookie_name=value'
+
+    @stub_request('https://example.com/test', 'get')
+    def test_get_w_cookies(self, stub):
+        cookies = {'cookie_name': 'value'}
+        self.client.get('test', cookies=cookies)
+        request = stub.request_history[0]
+        assert request.headers['Cookie'] == 'cookie_name=value'
+
+    @stub_request('https://example.com/test', 'get')
+    def test_get_wo_cookies(self, stub):
+        self.client.get('test')
+        request = stub.request_history[0]
+        assert 'Cookie' not in request.headers
+
 
 @pytest.mark.parametrize(
     'base_url,partial_url,expected_result',
