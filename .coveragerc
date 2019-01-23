@@ -1,2 +1,5 @@
 [run]
-omit = .venv/*,setup.py
+omit =
+    .venv/*
+    setup.py
+    *__init__*
