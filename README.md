@@ -4,7 +4,6 @@
 [![circle-ci-image]][circle-ci]
 [![codecov-image]][codecov]
 [![pypi-image]][pypi]
-[![snyk-image]][snyk]
 
 **Directory Client Core.**
 
@@ -104,6 +103,3 @@ Then run the following command:
 
 [pypi-image]: https://badge.fury.io/py/directory-client-core.svg
 [pypi]: https://badge.fury.io/py/directory-client-core
-
-[snyk-image]: https://snyk.io/test/github/uktrade/directory-client-core/badge.svg
-[snyk]: https://snyk.io/test/github/uktrade/directory-client-core

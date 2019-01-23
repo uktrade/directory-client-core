@@ -29,7 +29,7 @@ class SessionSSOAuthenticator(AbstractAuthenticator):
 
 
 class AuthenticatorNegotiator:
-    def __new__(self, bearer_token, sso_session_id):
+    def __new__(self, bearer_token=None, sso_session_id=None):
         assert bearer_token or sso_session_id
         if bearer_token:
             return BearerAuthenticator(bearer_token)
