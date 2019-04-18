@@ -1,13 +1,13 @@
-import abc
 from functools import wraps
 import json
 import logging
 from urllib.parse import urlencode
 
-from django.conf import settings
-
+import requests
 from requests.exceptions import HTTPError, RequestException
 from w3lib.url import canonicalize_url
+
+from django.conf import settings
 
 from directory_client_core.cache_control import ETagCacheControl
 
@@ -20,38 +20,57 @@ MESSAGE_CACHE_MISS = 'Fallback cache miss. Cannot use any content.'
 MESSAGE_NOT_FOUND = 'Resource not found.'
 
 
-class AbstractResponse(abc.ABC):
+class ThrottlingFilter(logging.Filter):
+    """
+    Filters out records that have been seen within the past <period of time>
+    thereby reducing noise.
 
-    def __init__(self, content, status_code, raw_response=None):
-        self.content = content
-        self.status_code = status_code
-        self.raw_response = raw_response
+    How this works:
+        - with `cache.add` the entry is stored only if the key is not yet
+          present in the cache
+        - cache.add returns True if the entry is stored, otherwise False
+        - these cache entries expire after <period of time>.
 
-    def raise_for_status(self):
-        if not 200 <= self.status_code < 300:
-            raise HTTPError(self.content)
+    Therefore `filter` returns True if the key hasn't been seen in the past
+    <period of time>, and False if it has. The logger takes this to mean
+    "don't log this"
 
-    def json(self):
-        return json.loads(self.content.decode('utf-8'))
+    """
+
+    def __init__(self, cache):
+        self.cache = cache
+        self.timeout_in_seconds = getattr(
+            settings,
+            'DIRECTORY_CLIENT_CORE_CACHE_LOG_THROTTLING_SECONDS',
+            None
+        ) or 60*60*24  # default 24 hours
+
+    def create_cache_key(sef, record):
+        return f'noise-{record.getMessage()}-{record.url}'
+
+    def filter(self, record):
+        key = self.create_cache_key(record)
+        return self.cache.add(key, '', timeout=self.timeout_in_seconds)
+
+
+class PopulateResponseMixin:
 
     @classmethod
-    def from_response(cls, response):
-        return cls(
-            content=response.content,
-            status_code=response.status_code,
-            raw_response=response,
-        )
+    def from_response(cls, raw_response):
+        response = cls()
+        response.__setstate__(raw_response.__getstate__())
+        return response
 
 
-class LiveResponse(AbstractResponse):
+class LiveResponse(PopulateResponseMixin, requests.Response):
     pass
 
 
-class CacheResponse(AbstractResponse):
+class FailureResponse(PopulateResponseMixin, requests.Response):
     pass
 
 
-class FailureResponse(AbstractResponse):
+class CacheResponse(requests.Response):
     pass
 
 
@@ -62,10 +81,19 @@ def fallback(cache):
 
     """
 
+    log_filter = ThrottlingFilter(cache=cache)
+    logger.filters = []
+    logger.addFilter(log_filter)
+
     def get_cache_response(cache_key):
         content = cache.get(cache_key)
         if content:
-            return CacheResponse(content=content, status_code=200)
+            response = CacheResponse()
+            response.__setstate__({
+                'status_code': 200,
+                '_content': content,
+            })
+            return response
 
     def get_cache_control(etag_cache_key):
         etag = cache.get(etag_cache_key)

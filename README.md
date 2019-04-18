@@ -4,6 +4,7 @@
 [![circle-ci-image]][circle-ci]
 [![codecov-image]][codecov]
 [![pypi-image]][pypi]
+[![semver-image]][semver]
 
 **Directory Client Core.**
 
@@ -72,10 +73,13 @@ class APIClient(AbstractAPIClient):
         return self.get(url='/some/path/')
 ```
 
+The `fallback` creates log entries when cache events occur. To reduce noise `DIRECTORY_CLIENT_CORE_CACHE_LOG_THROTTLING_SECONDS` can be set in settings. This will result in a log event being created only once every period of time. By default this means seeing "cache hit for url x" (for a given url) is shown once every 24 hours.
+
 ## Development
 
     $ git clone https://github.com/uktrade/directory-client-core
     $ cd directory-client-core
+    $ make test_requirements
 
 ## Publish to PyPI
 
@@ -103,3 +107,6 @@ Then run the following command:
 
 [pypi-image]: https://badge.fury.io/py/directory-client-core.svg
 [pypi]: https://badge.fury.io/py/directory-client-core
+
+[semver-image]: https://img.shields.io/badge/Versioning%20strategy-SemVer-5FBB1C.svg
+[semver]: https://semver.org
