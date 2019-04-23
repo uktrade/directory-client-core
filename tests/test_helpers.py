@@ -1,35 +1,16 @@
-from unittest.mock import patch
 import json
+import logging
+from unittest.mock import patch
 
 from freezegun import freeze_time
 import pytest
 import requests_mock
 import requests
-from requests import Response
-from requests.exceptions import HTTPError
 
 from django.core.cache import caches
 
 from directory_client_core.base import AbstractAPIClient
 from directory_client_core import helpers
-
-
-@pytest.mark.parametrize('response_class', [
-    helpers.LiveResponse,
-    helpers.CacheResponse,
-    helpers.FailureResponse,
-])
-def test_response_interoparability(response_class):
-    response = response_class(
-        content=bytes(json.dumps({'key': 'value'}), 'utf8'),
-        status_code=400,
-    )
-
-    assert response.status_code == 400
-    assert response.json() == {'key': 'value'}
-
-    with pytest.raises(HTTPError):
-        response.raise_for_status()
 
 
 @pytest.fixture
@@ -142,12 +123,10 @@ def test_bad_resonse_cache_hit(cached_client, caplog):
     assert response_one.status_code == 200
     assert response_one.content == expected_data
     assert isinstance(response_one, helpers.LiveResponse)
-    assert isinstance(response_one.raw_response, Response)
 
     assert response_two.status_code == 200
     assert response_two.content == expected_data
     assert isinstance(response_two, helpers.CacheResponse)
-    assert response_two.raw_response is None
 
     log = caplog.records()[-1]
     assert log.levelname == 'ERROR'
@@ -166,7 +145,6 @@ def test_bad_response_cache_miss(cached_client, caplog):
 
     assert response.status_code == 400
     assert isinstance(response, helpers.FailureResponse)
-    assert isinstance(response.raw_response, Response)
 
     log = caplog.records()[-1]
     assert log.levelname == 'ERROR'
@@ -185,7 +163,6 @@ def test_bad_response_404(cached_client, caplog):
 
     assert response.status_code == 404
     assert isinstance(response, helpers.LiveResponse)
-    assert isinstance(response.raw_response, Response)
 
     log = caplog.records()[-1]
     assert log.levelname == 'ERROR'
@@ -241,3 +218,61 @@ def test_cache_querystrings(cached_client, fallback_cache):
 
     cache_key = path + '?a=b&x=y'
     assert fallback_cache.get(cache_key) == expected_data
+
+
+def test_logging_noise_filtering(cached_client, caplog):
+
+    path = '/some/path/thing/'
+    expected_data = bytes(json.dumps({'key': 'value'}), 'utf8')
+    url = 'http://example.com' + path
+
+    with requests_mock.mock() as mock:
+        mock.get(url, content=expected_data)
+        cached_client.retrieve('thing')
+
+    with patch('directory_client_core.base.AbstractAPIClient.get') as mock_get:
+        mock_get.side_effect = requests.exceptions.ConnectionError()
+        cached_client.retrieve('thing')
+
+    errors = [item for item in caplog.records() if item.levelname == 'ERROR']
+    assert len(errors) == 1
+
+    with patch('directory_client_core.base.AbstractAPIClient.get') as mock_get:
+        mock_get.side_effect = requests.exceptions.ConnectionError()
+        cached_client.retrieve('thing')
+
+    # second log entry was filtered out
+    errors = [item for item in caplog.records() if item.levelname == 'ERROR']
+    assert len(errors) == 1
+
+
+def test_throttling_log_filter_timeout(settings, fallback_cache):
+    settings.DIRECTORY_CLIENT_CORE_CACHE_LOG_THROTTLING_SECONDS = 40
+    log_filter = helpers.ThrottlingFilter(cache=fallback_cache)
+
+    assert log_filter.timeout_in_seconds == 40
+
+
+def test_throttling_log_filter_timeout_default_day(settings, fallback_cache):
+    settings.DIRECTORY_CLIENT_CORE_CACHE_LOG_THROTTLING_SECONDS = None
+    log_filter = helpers.ThrottlingFilter(cache=fallback_cache)
+
+    assert log_filter.timeout_in_seconds == 60*60*24  # 24 hours
+
+
+def test_throttling_filter(fallback_cache):
+    log_filter = helpers.ThrottlingFilter(cache=fallback_cache)
+    logger = logging.getLogger()
+    record = logger.makeRecord(
+        name='',
+        level='ERROR',
+        fn='',
+        lno='',
+        msg='something bad happened',
+        args=[],
+        exc_info='',
+        extra={'url': 'https://www.google.com'}
+    )
+
+    assert log_filter.filter(record) is True
+    assert log_filter.filter(record) is False
