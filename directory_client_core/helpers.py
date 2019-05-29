@@ -71,7 +71,13 @@ class FailureResponse(PopulateResponseMixin, requests.Response):
 
 
 class CacheResponse(requests.Response):
-    pass
+
+    @classmethod
+    def from_cached_content(cls, cached_content):
+        response = cls()
+        response.status_code = 200
+        response._content = cached_content
+        return response
 
 
 def fallback(cache):
@@ -85,32 +91,23 @@ def fallback(cache):
     logger.filters = []
     logger.addFilter(log_filter)
 
-    def get_cache_response(cache_key):
-        content = cache.get(cache_key)
-        if content:
-            response = CacheResponse()
-            response.__setstate__({
-                'status_code': 200,
-                '_content': content,
-            })
-            return response
-
-    def get_cache_control(etag_cache_key):
-        etag = cache.get(etag_cache_key)
-        if etag:
-            return ETagCacheControl(etag)
+    def get_cache_control(cached_content):
+        if cached_content:
+            parsed = json.loads(cached_content.decode())
+            if 'etag' in parsed:
+                return ETagCacheControl(f'"{parsed["etag"]}"')
 
     def closure(func):
         @wraps(func)
         def wrapper(client, url, params={}, *args, **kwargs):
             cache_key = canonicalize_url(url + '?' + urlencode(params))
-            etag_cache_key = 'etag-' + cache_key
+            cached_content = cache.get(cache_key, {})
             try:
-                remote_response = func(
+                response = func(
                     client,
                     url=url,
                     params=params,
-                    cache_control=get_cache_control(etag_cache_key),
+                    cache_control=get_cache_control(cached_content),
                     *args,
                     **kwargs,
                 )
@@ -118,37 +115,34 @@ def fallback(cache):
                 # Failed to create the request e.g., the remote server is down,
                 # perhaps a timeout occurred, or even connection closed by
                 # remote, etc.
-                response = get_cache_response(cache_key)
-                if response:
+                if cached_content:
                     logger.error(MESSAGE_CACHE_HIT, extra={'url': url})
+                    return CacheResponse.from_cached_content(cached_content)
                 else:
                     raise
             else:
-                log_context = {
-                    'status_code': remote_response.status_code, 'url': url
-                }
-                if remote_response.status_code == 404:
+                log_context = {'status_code': response.status_code, 'url': url}
+                if response.status_code == 404:
                     logger.error(MESSAGE_NOT_FOUND, extra=log_context)
-                    return LiveResponse.from_response(remote_response)
-                elif remote_response.status_code == 304:
-                    response = get_cache_response(cache_key)
-                elif not remote_response.ok:
+                    return LiveResponse.from_response(response)
+                elif response.status_code == 304:
+                    return CacheResponse.from_cached_content(cached_content)
+                elif not response.ok:
                     # Successfully requested the content, but the response is
                     # not OK (e.g., 500, 403, etc)
-                    response = get_cache_response(cache_key)
-                    if response:
+                    if cached_content:
                         logger.error(MESSAGE_CACHE_HIT, extra=log_context)
+                        return CacheResponse.from_cached_content(cached_content)
                     else:
                         logger.exception(MESSAGE_CACHE_MISS, extra=log_context)
-                        response = FailureResponse.from_response(
-                            remote_response
-                        )
+                        return FailureResponse.from_response(response)
                 else:
-                    cache.set_many({
-                        cache_key: remote_response.content,
-                        etag_cache_key: remote_response.headers.get('ETag'),
-                    }, settings.DIRECTORY_CLIENT_CORE_CACHE_EXPIRE_SECONDS)
-                    response = LiveResponse.from_response(remote_response)
-            return response
+                    cache.set(
+                        cache_key,
+                        response.content,
+                        settings.DIRECTORY_CLIENT_CORE_CACHE_EXPIRE_SECONDS
+                    )
+                    return LiveResponse.from_response(response)
+            raise NotImplementedError('unreachable')
         return wrapper
     return closure

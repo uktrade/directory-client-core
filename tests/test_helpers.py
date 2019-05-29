@@ -60,7 +60,9 @@ def test_good_response_cached(cached_client, fallback_cache):
 
 
 def test_good_response_etag(cached_client, fallback_cache):
-    expected_data = bytes(json.dumps({'key': 'value'}), 'utf8')
+    expected_data = bytes(
+        json.dumps({'key': 'value', 'etag': '123'}), 'utf8'
+    )
     path = '/some/path/thing/'
 
     url = 'http://example.com' + path
@@ -73,8 +75,6 @@ def test_good_response_etag(cached_client, fallback_cache):
 
     cache_key = path + '?a=b&x=y'
     assert fallback_cache.get(cache_key) == expected_data
-    # and the etag has been saved
-    assert fallback_cache.get('etag-' + cache_key) == '"123"'
 
     # when the same page is requested and the remote server returns 304
     with requests_mock.mock() as mock:
