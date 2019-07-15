@@ -19,7 +19,7 @@ setup(
         'requests>=2.21.0,<3.0.0',
         'monotonic>=1.2,<3.0',
         'sigauth>=4.0.1,<5.0.0',
-        'django>=1.11.22,<2.0a1',
+        'django>=2.2,<3.0a1',
         'w3lib>=1.19.0<2.0.0',
     ],
     extras_require={
