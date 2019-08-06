@@ -146,3 +146,32 @@ def fallback(cache):
             raise NotImplementedError('unreachable')
         return wrapper
     return closure
+
+def ttl(cache, seconds):
+    log_filter = ThrottlingFilter(cache=cache)
+    logger.filters = []
+    logger.addFilter(log_filter)
+
+    def closure(func):
+        @wraps(func)
+        def wrapper(client, source_url, *args, **kwargs):
+            cache_key = canonicalize_url(source_url)
+            cached_content = cache.get(cache_key)
+            if cached_content:
+                return cached_content
+            else:
+                response = func(
+                    client,
+                    source_url=source_url,
+                    *args,
+                    **kwargs,
+                )
+                cache.set(
+                    cache_key,
+                    response.content,
+                    seconds
+                )
+                return LiveResponse.from_response(response)
+            raise NotImplementedError('unreachable')
+        return wrapper
+    return closure

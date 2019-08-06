@@ -3,6 +3,7 @@
 ## 6.0.1
 [Full Changelog](https://github.com/uktrade/directory-client-core/pull/20/files)
 - No ticket - django version to update install requires django 2.2
+- GTRANSFORM-69 Automating redirects on great.gov
 
 ## 6.0.0
 [Full Changelog](https://github.com/uktrade/directory-client-core/pull/19/files)
