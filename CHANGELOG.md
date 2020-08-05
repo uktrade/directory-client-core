@@ -1,4 +1,7 @@
 # Changelog
+## 6.0.2
+[Full Changelog](https://github.com/uktrade/directory-client-core/pull/21/files)
+- No ticket - Security fix upgrade django to support 3.0.7
 
 ## 6.0.1
 [Full Changelog](https://github.com/uktrade/directory-client-core/pull/20/files)

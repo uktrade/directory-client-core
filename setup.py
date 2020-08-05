@@ -16,7 +16,7 @@ setup(
     long_description_content_type='text/markdown',
     include_package_data=True,
     install_requires=[
-        'requests>=2.21.0,<3.0.0',
+        'requests>=2.21.0,<=3.0.7',
         'monotonic>=1.2,<3.0',
         'sigauth>=4.0.1,<5.0.0',
         'django>=1.11.22,<3.0a1',
@@ -45,7 +45,8 @@ setup(
         'Framework :: Django :: 1.11',
         'Framework :: Django :: 2.0',
         'Framework :: Django :: 2.1',
-        'Framework :: Django :: 2.2',
+        'Framework :: Django :: 2.2.13',
+        'Framework :: Django :: 3.0.7',
         'Intended Audience :: Developers',
         'License :: OSI Approved :: MIT License',
         'Natural Language :: English',
