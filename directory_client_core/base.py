@@ -87,6 +87,7 @@ class AbstractAPIClient(abc.ABC):
             url=url,
             method="DELETE",
             authenticator=authenticator,
+            data=data,
         )
 
     @staticmethod
