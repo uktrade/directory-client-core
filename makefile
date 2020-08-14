@@ -8,7 +8,7 @@ test_requirements:
 	pip install -e .[test]
 
 flake8:
-	flake8 . --exclude=.venv
+	flake8 . --exclude=.venv --max-line-length=120
 
 pytest:
 	pytest . --capture=no --cov=. --cov-config=.coveragerc $(pytest_args)

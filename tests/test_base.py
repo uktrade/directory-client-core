@@ -55,6 +55,14 @@ class AbstractAPIClientTest(TestCase):
         assert request.headers['Content-type'] == 'application/json'
         assert request.text == '{"key": "value"}'
 
+    @stub_request('https://example.com/test', 'delete')
+    def test_delete_encodes_json(self, stub):
+        data = {'key': 'value'}
+        self.client.delete('test', data=data)
+        request = stub.request_history[0]
+        assert request.headers['Content-type'] == 'application/x-www-form-urlencoded'
+        assert request.text == 'key=value'
+
     @stub_request('https://example.com/test', 'patch')
     def test_patch_encodes_json_without_file(self, stub):
         data = {'key': 'value'}
