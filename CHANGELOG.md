@@ -1,5 +1,9 @@
 # Changelog
 
+## 6.3.0
+[Full Changelog](https://github.com/uktrade/directory-client-core/pull/24/files)
+- No ticket - bump django version in setup.py so Django 3.x can start using this package
+
 ## 6.2.0
 [Full Changelog](https://github.com/uktrade/directory-client-core/pull/23/files)
 - No ticket - Added missing data arg on delete method
