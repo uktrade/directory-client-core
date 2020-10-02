@@ -6,7 +6,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='directory_client_core',
-    version='6.2.0',
+    version='6.2.1',
     url='https://github.com/uktrade/directory-client-core',
     license='MIT',
     author='Department for International Trade',
@@ -19,7 +19,7 @@ setup(
         'requests>=2.21.0,<3.0.0',
         'monotonic>=1.2,<3.0',
         'sigauth>=4.0.1,<5.0.0',
-        'django>=1.11.22,<3.0a1',
+        'django>=1.11.22,<4.0.0',
         'w3lib>=1.19.0<2.0.0',
     ],
     extras_require={
@@ -46,6 +46,7 @@ setup(
         'Framework :: Django :: 2.0',
         'Framework :: Django :: 2.1',
         'Framework :: Django :: 2.2',
+        'Framework :: Django :: 3.1',
         'Intended Audience :: Developers',
         'License :: OSI Approved :: MIT License',
         'Natural Language :: English',
