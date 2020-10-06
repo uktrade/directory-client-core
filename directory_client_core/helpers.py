@@ -4,7 +4,7 @@ import logging
 from urllib.parse import urlencode
 
 import requests
-from requests.exceptions import HTTPError, RequestException
+from requests.exceptions import RequestException
 from w3lib.url import canonicalize_url
 
 from django.conf import settings

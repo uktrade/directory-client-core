@@ -128,7 +128,7 @@ def test_bad_resonse_cache_hit(cached_client, caplog):
     assert response_two.content == expected_data
     assert isinstance(response_two, helpers.CacheResponse)
 
-    log = caplog.records()[-1]
+    log = caplog.records[-1]
     assert log.levelname == 'ERROR'
     assert log.msg == helpers.MESSAGE_CACHE_HIT
     assert log.status_code == 400
@@ -146,7 +146,7 @@ def test_bad_response_cache_miss(cached_client, caplog):
     assert response.status_code == 400
     assert isinstance(response, helpers.FailureResponse)
 
-    log = caplog.records()[-1]
+    log = caplog.records[-1]
     assert log.levelname == 'ERROR'
     assert log.msg == helpers.MESSAGE_CACHE_MISS
     assert log.status_code == 400
@@ -164,7 +164,7 @@ def test_bad_response_404(cached_client, caplog):
     assert response.status_code == 404
     assert isinstance(response, helpers.LiveResponse)
 
-    log = caplog.records()[-1]
+    log = caplog.records[-1]
     assert log.levelname == 'ERROR'
     assert log.msg == helpers.MESSAGE_NOT_FOUND
     assert log.status_code == 404
@@ -192,7 +192,7 @@ def test_connection_error_cache_hit(cached_client, caplog):
     assert response_two.content == expected_data
     assert isinstance(response_two, helpers.CacheResponse)
 
-    log = caplog.records()[-1]
+    log = caplog.records[-1]
     assert log.levelname == 'ERROR'
     assert log.msg == helpers.MESSAGE_CACHE_HIT
     assert log.url == path
@@ -205,7 +205,7 @@ def test_connection_error_cache_miss(cached_client, caplog):
         with pytest.raises(requests.exceptions.ConnectionError):
             cached_client.retrieve('thing')
 
-    assert len(caplog.records()) == 0
+    assert len(caplog.records) == 0
 
 
 def test_cache_querystrings(cached_client, fallback_cache):
@@ -234,7 +234,7 @@ def test_logging_noise_filtering(cached_client, caplog):
         mock_get.side_effect = requests.exceptions.ConnectionError()
         cached_client.retrieve('thing')
 
-    errors = [item for item in caplog.records() if item.levelname == 'ERROR']
+    errors = [item for item in caplog.records if item.levelname == 'ERROR']
     assert len(errors) == 1
 
     with patch('directory_client_core.base.AbstractAPIClient.get') as mock_get:
@@ -242,7 +242,7 @@ def test_logging_noise_filtering(cached_client, caplog):
         cached_client.retrieve('thing')
 
     # second log entry was filtered out
-    errors = [item for item in caplog.records() if item.levelname == 'ERROR']
+    errors = [item for item in caplog.records if item.levelname == 'ERROR']
     assert len(errors) == 1
 
 
