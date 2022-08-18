@@ -6,7 +6,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='directory_client_core',
-    version='6.3.0',
+    version='7.0.0',
     url='https://github.com/uktrade/directory-client-core',
     license='MIT',
     author='Department for International Trade',
@@ -25,17 +25,16 @@ setup(
     extras_require={
         'test': [
             'codecov==2.1.9',
-            'flake8==3.8.3',
+            'flake8==5.0.4',
             'freezegun==1.0.0',
-            'pytest-capturelog==0.7',
             'pytest-cov==2.10.1',
-            'pytest-django==3.10.0',
-            'pytest-sugar==0.9.4',
-            'pytest==6.1.0',
+            'pytest-django==4.1.0',
+            'pytest-sugar==0.9.5',
+            'pytest==5.4.0',
             'requests_mock==1.8.0',
             'setuptools>=38.6.0,<39.0.0',
             'twine>=1.11.0,<2.0.0',
-            'wheel>=0.31.0,<1.0.0',
+            'wheel>=0.31.0,<1.0.0'
         ]
     },
     classifiers=[
@@ -47,11 +46,12 @@ setup(
         'Framework :: Django :: 2.1',
         'Framework :: Django :: 2.2',
         'Framework :: Django :: 3.1',
+        'Framework :: Django :: 3.2',
         'Intended Audience :: Developers',
         'License :: OSI Approved :: MIT License',
         'Natural Language :: English',
         'Operating System :: OS Independent',
-        'Programming Language :: Python :: 3.6',
+        'Programming Language :: Python :: 3.9',
         'Programming Language :: Python :: Implementation :: PyPy',
         'Topic :: Software Development :: Libraries :: Python Modules',
     ]

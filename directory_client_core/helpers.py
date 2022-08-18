@@ -132,7 +132,7 @@ def fallback(cache):
                     # not OK (e.g., 500, 403, etc)
                     if cached_content:
                         logger.error(MESSAGE_CACHE_HIT, extra=log_context)
-                        return CacheResponse.from_cached_content(cached_content)
+                        return CacheResponse.from_cached_content(cached_content) # noqa
                     else:
                         logger.exception(MESSAGE_CACHE_MISS, extra=log_context)
                         return FailureResponse.from_response(response)

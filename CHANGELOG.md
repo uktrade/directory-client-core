@@ -1,5 +1,9 @@
 # Changelog
 
+## 7.0.0
+[Full Changelog](https://github.com/uktrade/directory-client-core/pull/21/files)
+- GLS-392 - django version to update install requires django 3.2
+
 ## 6.3.0
 [Full Changelog](https://github.com/uktrade/directory-client-core/pull/24/files)
 - No ticket - bump django version in setup.py so Django 3.x can start using this package

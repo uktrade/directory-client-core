@@ -163,7 +163,6 @@ def test_bad_response_404(cached_client, caplog):
 
     assert response.status_code == 404
     assert isinstance(response, helpers.LiveResponse)
-
     log = caplog.records[-1]
     assert log.levelname == 'ERROR'
     assert log.msg == helpers.MESSAGE_NOT_FOUND
