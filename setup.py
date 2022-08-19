@@ -1,12 +1,11 @@
 """
 Directory API client core
 """
-from setuptools import setup, find_packages
-
+from setuptools import find_packages, setup
 
 setup(
     name='directory_client_core',
-    version='7.0.0',
+    version='7.1.0',
     url='https://github.com/uktrade/directory-client-core',
     license='MIT',
     author='Department for International Trade',
@@ -18,7 +17,7 @@ setup(
     install_requires=[
         'requests>=2.21.0,<3.0.0',
         'monotonic>=1.2,<3.0',
-        'sigauth>=4.0.1,<5.0.0',
+        'sigauth>=4.0.1,<5.2.0',
         'django>=1.11.22,<4.0.0',
         'w3lib>=1.19.0<2.0.0',
     ],
@@ -34,7 +33,7 @@ setup(
             'requests_mock==1.8.0',
             'setuptools>=38.6.0,<39.0.0',
             'twine>=1.11.0,<2.0.0',
-            'wheel>=0.31.0,<1.0.0'
+            'wheel>=0.31.0,<1.0.0',
         ]
     },
     classifiers=[
@@ -54,5 +53,5 @@ setup(
         'Programming Language :: Python :: 3.9',
         'Programming Language :: Python :: Implementation :: PyPy',
         'Topic :: Software Development :: Libraries :: Python Modules',
-    ]
+    ],
 )

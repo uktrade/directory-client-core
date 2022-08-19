@@ -1,5 +1,9 @@
 # Changelog
 
+## 7.1.0
+[Full Changelog](https://github.com/uktrade/directory-client-core/pull/28/files)
+- GLS-380 - Update maximum sigauth version for compatibility with Django 3.2
+
 ## 7.0.0
 [Full Changelog](https://github.com/uktrade/directory-client-core/pull/21/files)
 - GLS-392 - django version to update install requires django 3.2
@@ -24,4 +28,3 @@
 [Full Changelog](https://github.com/uktrade/directory-client-core/pull/14/files)
 ### Bug fixes
 - No ticket - Upgrade vulnerable django version to django 1.11.22
-
