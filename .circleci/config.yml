@@ -2,7 +2,7 @@ version: 2.1
 jobs:
   test:
     docker:
-      - image: circleci/python:3.6.6
+      - image: circleci/python:3.9
     steps:
       - checkout
       - run:
@@ -15,7 +15,7 @@ jobs:
 
   publish_to_pypi:
     docker:
-      - image: circleci/python:3.6.6
+      - image: circleci/python:3.9
     steps:
       - checkout
       - run:
