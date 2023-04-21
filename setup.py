@@ -5,7 +5,7 @@ from setuptools import find_packages, setup
 
 setup(
     name='directory_client_core',
-    version='7.1.1',
+    version='7.1.2',
     url='https://github.com/uktrade/directory-client-core',
     license='MIT',
     author='Department for International Trade',
@@ -23,13 +23,14 @@ setup(
     ],
     extras_require={
         'test': [
-            'codecov==2.1.9',
             'flake8==5.0.4',
             'freezegun==1.0.0',
-            'pytest-cov==2.10.1',
             'pytest-django==4.1.0',
             'pytest-sugar==0.9.5',
             'pytest==5.4.0',
+            'pytest-cov',
+            'pytest-codecov',
+            'GitPython',
             'requests_mock==1.8.0',
             'setuptools>=38.6.0,<39.0.0',
             'twine>=1.11.0,<2.0.0',
