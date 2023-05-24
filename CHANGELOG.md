@@ -2,7 +2,7 @@
 
 ## 7.1.2
 
-[Full Changelog]()
+[Full Changelog](https://github.com/uktrade/directory-client-core/pull/35)
 
 - KLS-622 - Upgrade sigauth to 5.2.0
 
