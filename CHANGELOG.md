@@ -1,6 +1,6 @@
 # Changelog
 
-## 7.1.2
+## 7.2.1
 
 [Full Changelog](https://github.com/uktrade/directory-client-core/pull/35)
 
