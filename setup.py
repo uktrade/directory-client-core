@@ -5,7 +5,7 @@ from setuptools import find_packages, setup
 
 setup(
     name='directory_client_core',
-    version='7.2.2',
+    version='7.2.3',
     url='https://github.com/uktrade/directory-client-core',
     license='MIT',
     author='Department for International Trade',
