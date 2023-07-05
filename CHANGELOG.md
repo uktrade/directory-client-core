@@ -3,7 +3,7 @@
 
 ## 7.2.4
 
-[Full Changelog]()
+[Full Changelog](https://github.com/uktrade/directory-client-core/pull/38)
 
 - KLS-822 - Upgrade django to 4.2.3
 
