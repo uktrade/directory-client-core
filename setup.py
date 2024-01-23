@@ -5,7 +5,7 @@ from setuptools import find_packages, setup
 
 setup(
     name='directory_client_core',
-    version='7.2.8',
+    version='7.2.9',
     url='https://github.com/uktrade/directory-client-core',
     license='MIT',
     author='Department for International Trade',
@@ -17,8 +17,8 @@ setup(
     install_requires=[
         'requests>=2.21.0,<3.0.0',
         'monotonic>=1.2,<3.0',
-        'sigauth>=4.0.1,<=5.2.3',
-        'django>=3.2.18,<=4.2.7',
+        'sigauth==5.2.4',
+        'django>=4.2.7,<4.2.8',
         'w3lib>=1.19.0,<2.0.0',
     ],
     extras_require={
