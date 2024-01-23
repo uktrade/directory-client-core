@@ -17,7 +17,7 @@ setup(
     install_requires=[
         'requests>=2.21.0,<3.0.0',
         'monotonic>=1.2,<3.0',
-        'sigauth==5.2.4',
+        'sigauth>=5.2.4,<6.0.0',
         'django>=4.2.7,<4.2.8',
         'w3lib>=1.19.0,<2.0.0',
     ],

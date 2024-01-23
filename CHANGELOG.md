@@ -3,7 +3,7 @@
 
 ## 7.2.9
 
-[Full Changelog]() (23-01-2024)
+[Full Changelog](https://github.com/uktrade/directory-client-core/pull/43) (23-01-2024)
 
 - KLS-1821 - Set Django Minimum 4.2.7
 
