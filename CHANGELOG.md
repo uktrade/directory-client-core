@@ -3,7 +3,7 @@
 
 ## 7.2.11
 
-[Full Changelog](https://github.com/uktrade/directory-client-core/pull/44) (2-02-2024)
+[Full Changelog](https://github.com/uktrade/directory-client-core/pull/45) (3-02-2024)
 
 - KLS-1916 - Bump sigauth min 5.2.5
 
