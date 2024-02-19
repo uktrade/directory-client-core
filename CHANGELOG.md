@@ -3,7 +3,7 @@
 
 ## 7.2.12
 
-[Full Changelog]() (19-02-2024)
+[Full Changelog](https://github.com/uktrade/directory-client-core/pull/46) (19-02-2024)
 
 - KLS-1948 - Bump Django to 4.2.10 min
 
