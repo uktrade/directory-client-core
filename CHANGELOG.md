@@ -1,6 +1,13 @@
 # Changelog
 
 
+## 7.2.13
+
+[Full Changelog](https://github.com/uktrade/directory-client-core/pull/46) (19-02-2024)
+
+- POLS-94 - Add code owners file
+
+
 ## 7.2.12
 
 [Full Changelog](https://github.com/uktrade/directory-client-core/pull/46) (19-02-2024)
